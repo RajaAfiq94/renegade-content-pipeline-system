@@ -1,0 +1,53 @@
+{
+  "identity": {
+    "name": "Forward Momentum",
+    "designation": null,
+    "logo_path": "assets/logo.png",
+    "logo_position": "bottom-left",
+    "logo_size": "small",
+    "logo_note": "assets/logo.png is white and orange on transparent, for dark backgrounds. Use assets/logo-on-white.png only on light backgrounds."
+  },
+  "platform": {
+    "primary": "instagram",
+    "default_width": 1080,
+    "default_height": 1350
+  },
+  "typography": {
+    "display_font": "Space Grotesk",
+    "display_weights": [
+      700
+    ],
+    "body_font": "Inter",
+    "body_weights": [
+      300,
+      400,
+      500,
+      600
+    ],
+    "mono_font": "Space Mono",
+    "mono_weights": [
+      400,
+      700
+    ],
+    "google_fonts_url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap",
+    "local_fonts_css": "assets/fonts/fonts.css",
+    "google_fonts_url_note": "Google Fonts is blocked in the cloud. Link assets/fonts/fonts.css instead of the Google Fonts URL."
+  },
+  "colors": {
+    "background": "#0A0A0A",
+    "text_primary": "#FFFFFF",
+    "text_secondary": "rgba(255,255,255,0.6)",
+    "text_muted": "rgba(255,255,255,0.35)",
+    "accent": "#FF4206",
+    "accent_glow": "rgba(255,66,6,0.5)",
+    "card_bg": "rgba(255,255,255,0.05)",
+    "card_border": "rgba(255,255,255,0.08)"
+  },
+  "style": {
+    "vibe": "bold-editorial",
+    "content_type": "thought-leadership",
+    "border_radius": "12px",
+    "base_padding": "40px",
+    "grid_unit": 8
+  }
+}
