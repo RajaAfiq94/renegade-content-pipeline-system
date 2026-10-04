@@ -13,7 +13,7 @@
  *   node export-png.js design.html poster.png 1080 1080 2        # 2x scale (not recommended)
  */
 
-const puppeteer = require('puppeteer');
+const { launch } = require('./browser');
 const path = require('path');
 
 const args = process.argv.slice(2);
@@ -48,18 +48,15 @@ const scale = parseInt(args[4]) || 4;
   console.log(`Size: ${width}x${height} CSS → ${width * scale}x${height * scale}px output`);
   console.log(`Scale: ${scale}x`);
 
-  const browser = await puppeteer.launch({ headless: true });
-  const page = await browser.newPage();
+  const browser = await launch();
 
-  // Set viewport to match design dimensions
-  await page.setViewport({
-    width: width,
-    height: height,
+  const page = await browser.newPage({
+    viewport: { width: width, height: height },
     deviceScaleFactor: scale
   });
 
   // Load the HTML file
-  await page.goto(`file://${inputFile}`, { waitUntil: 'networkidle0' });
+  await page.goto(`file://${inputFile}`, { waitUntil: 'networkidle' });
 
   // Wait for fonts to load (critical for Google Fonts)
   await new Promise(r => setTimeout(r, 2500));
