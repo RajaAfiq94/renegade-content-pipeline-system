@@ -14,7 +14,7 @@
  *   node export-carousel.js carousel.html ./slides/ 1080 1350
  */
 
-const puppeteer = require('puppeteer');
+const { launch } = require('./browser');
 const path = require('path');
 const fs = require('fs');
 
@@ -49,18 +49,15 @@ const scale = parseInt(args[4]) || 4;
   console.log(`Slide size: ${width}x${height} CSS → ${width * scale}x${height * scale}px`);
   console.log(`Output dir: ${outputDir}`);
 
-  const browser = await puppeteer.launch({ headless: true });
-  const page = await browser.newPage();
+  const browser = await launch();
 
-  // Set viewport
-  await page.setViewport({
-    width: width,
-    height: height,
+  const page = await browser.newPage({
+    viewport: { width: width, height: height },
     deviceScaleFactor: scale
   });
 
   // Load the HTML
-  await page.goto(`file://${inputFile}`, { waitUntil: 'networkidle0' });
+  await page.goto(`file://${inputFile}`, { waitUntil: 'networkidle' });
 
   // Wait for fonts
   await new Promise(r => setTimeout(r, 2500));
@@ -81,42 +78,12 @@ const scale = parseInt(args[4]) || 4;
 
   // Export each slide
   for (let i = 0; i < slideCount; i++) {
-    // Scroll to position each slide at the top
-    await page.evaluate((index, slideHeight) => {
-      const slides = document.querySelectorAll('.page, .slide');
-      if (slides[index]) {
-        slides[index].scrollIntoView({ block: 'start' });
-      }
-    }, i, height);
-
-    // Small delay for rendering
-    await new Promise(r => setTimeout(r, 300));
-
-    // Get the slide's position
-    const slidePos = await page.evaluate((index) => {
-      const slides = document.querySelectorAll('.page, .slide');
-      if (slides[index]) {
-        const rect = slides[index].getBoundingClientRect();
-        return { x: rect.x + window.scrollX, y: rect.y + window.scrollY, width: rect.width, height: rect.height }; // fixed: clip uses page coordinates
-      }
-      return null;
-    }, i);
-
-    if (!slidePos) continue;
-
     const slideNum = String(i + 1).padStart(2, '0');
     const outputPath = path.join(outputDir, `slide-${slideNum}.png`);
 
-    await page.screenshot({
-      path: outputPath,
-      clip: {
-        x: slidePos.x,
-        y: slidePos.y,
-        width: width,
-        height: height
-      },
-      type: 'png'
-    });
+    // Screenshot the slide element directly (handles scrolling and page offsets)
+    const slide = page.locator('.page, .slide').nth(i);
+    await slide.screenshot({ path: outputPath, type: 'png' });
 
     console.log(`  Exported slide ${slideNum}/${String(slideCount).padStart(2, '0')}: ${outputPath}`);
   }

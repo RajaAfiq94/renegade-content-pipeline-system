@@ -155,6 +155,6 @@ All paths are relative to this skill's folder (`.claude/skills/design-engine/`).
 7. **Export** with the wrapper, which installs dependencies and handles the cloud browser:
    - Carousel: `bash .claude/skills/design-engine/scripts/export.sh carousel design.html slides/ 1080 1350 1`
    - Single Image: `bash .claude/skills/design-engine/scripts/export.sh png design.html post.png 1080 1350 1`
-   Use scale 1 (1080 x 1350 output) so the files are small enough to upload to Google Drive.
+   Use scale 1 (1080 x 1350 output) to keep the files small enough to send to the user as attachments.
 8. **Self-review.** Open every exported PNG with the Read tool and check it against `workflows/self-review.md`. Score 4 or higher before handing back. Also confirm every slide is different (no repeated slide 1).
 9. **Standards win.** Where this skill conflicts with 01 Standards and Rules in Notion (writing rules, faceless, no prices), the Standards win. Put the Asset Spec text on the slides exactly as written.

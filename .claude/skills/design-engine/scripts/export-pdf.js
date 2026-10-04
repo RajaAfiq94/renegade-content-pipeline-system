@@ -12,7 +12,7 @@
  *   node export-pdf.js carousel.html slides.pdf 1080 1350        # Portrait slides
  */
 
-const puppeteer = require('puppeteer');
+const { launch } = require('./browser');
 const path = require('path');
 
 const args = process.argv.slice(2);
@@ -45,18 +45,15 @@ const height = parseInt(args[3]) || 1123;
   console.log(`\nExporting PDF: ${path.basename(inputFile)}`);
   console.log(`Page size: ${width}x${height}px`);
 
-  const browser = await puppeteer.launch({ headless: true });
-  const page = await browser.newPage();
+  const browser = await launch();
 
-  // Set viewport for rendering
-  await page.setViewport({
-    width: width,
-    height: height,
+  const page = await browser.newPage({
+    viewport: { width: width, height: height },
     deviceScaleFactor: 4
   });
 
   // Load the HTML file
-  await page.goto(`file://${inputFile}`, { waitUntil: 'networkidle0' });
+  await page.goto(`file://${inputFile}`, { waitUntil: 'networkidle' });
 
   // Wait for fonts to load
   await new Promise(r => setTimeout(r, 2500));
